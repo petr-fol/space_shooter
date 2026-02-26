@@ -174,10 +174,14 @@ class Game:
             if hasattr(self.level, 'enemies_killed') and hasattr(self.level, 'enemies_to_kill'):
                 if not self.level.boss_spawned:
                     counter_text = level_font.render(
-                        f"Enemies: {self.level.enemies_killed}/{self.level.enemies_to_kill}",
+                        f"Killed: {self.level.enemies_killed}/{self.level.enemies_to_kill}",
                         True, WHITE
                     )
                     surface.blit(counter_text, (SCREEN_WIDTH // 2 - counter_text.get_width() // 2, 55))
                 else:
                     boss_text = level_font.render("BOSS FIGHT!", True, RED := (255, 0, 0))
                     surface.blit(boss_text, (SCREEN_WIDTH // 2 - boss_text.get_width() // 2, 55))
+
+        # Отладка - количество врагов на экране
+        debug_text = pygame.font.Font(None, 24).render(f"Enemies on screen: {len(self.enemies)}", True, (150, 150, 150))
+        surface.blit(debug_text, (10, SCREEN_HEIGHT - 30))

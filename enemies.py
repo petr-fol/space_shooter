@@ -79,7 +79,7 @@ class Enemy(pygame.sprite.Sprite):
             self.rect.right = 0
             self.start_x = -self.rect.width // 2
 
-        # Удаление если ушёл слишком далеко вниз
+        # Удаление если ушёл слишком далеко вниз - ВРАГ УБИРАЕТСЯ БЕЗ ОЧКОВ
         if self.rect.top > SCREEN_HEIGHT + 50:
             self.kill()
 
@@ -89,7 +89,8 @@ class Enemy(pygame.sprite.Sprite):
         current_time = pygame.time.get_ticks()
         if current_time - self.shoot_timer > self.shoot_delay:
             self.shoot_timer = current_time
-            bullet = EnemyBullet(self.rect.centerx, self.rect.bottom, self.speed * 1.5)
+            # Пуля с фиксированной скоростью 5
+            bullet = EnemyBullet(self.rect.centerx, self.rect.bottom, speed=5)
             return bullet
         return None
 
@@ -214,9 +215,10 @@ class ShooterEnemy(Enemy):
         if current_time - self.shoot_timer > self.shoot_delay:
             self.shoot_timer = current_time
             bullets = []
-            bullets.append(EnemyBullet(self.rect.centerx, self.rect.bottom, self.speed * 2))
-            bullets.append(EnemyBullet(self.rect.centerx, self.rect.bottom, self.speed * 2, math.pi/6))
-            bullets.append(EnemyBullet(self.rect.centerx, self.rect.bottom, self.speed * 2, -math.pi/6))
+            # Пули с фиксированной скоростью
+            bullets.append(EnemyBullet(self.rect.centerx, self.rect.bottom, speed=5))
+            bullets.append(EnemyBullet(self.rect.centerx, self.rect.bottom, speed=5, angle=math.pi/6))
+            bullets.append(EnemyBullet(self.rect.centerx, self.rect.bottom, speed=5, angle=-math.pi/6))
             return bullets
         return None
 
@@ -272,6 +274,9 @@ class BossEnemy(Enemy):
         # Движение по горизонтали в пределах диапазона
         self.rect.x += self.speed * self.move_direction
 
+        # Фиксируем Y позицию - босс не двигается вниз!
+        self.rect.centery = self.base_y
+
         # Разворот у границ диапазона
         if self.rect.centerx > self.base_x + self.move_range:
             self.move_direction = -1
@@ -292,6 +297,25 @@ class BossEnemy(Enemy):
             self.attack_timer = 0
             self.attack_pattern = (self.attack_pattern + 1) % 3
 
+    def draw(self, surface):
+        """Отрисовка босса с полоской здоровья"""
+        surface.blit(self.image, self.rect)
+        # Полоска здоровья босса
+        self.draw_health_bar(surface)
+
+    def draw_health_bar(self, surface):
+        """Отрисовка полоски здоровья босса"""
+        bar_width = 100
+        bar_height = 8
+        fill = (self.health / self.max_health) * bar_width
+
+        # Фон
+        pygame.draw.rect(surface, (100, 0, 0), (self.rect.centerx - bar_width//2, self.rect.top - 15, bar_width, bar_height))
+        # Заполнение
+        pygame.draw.rect(surface, (255, 0, 0), (self.rect.centerx - bar_width//2, self.rect.top - 15, fill, bar_height))
+        # Рамка
+        pygame.draw.rect(surface, WHITE, (self.rect.centerx - bar_width//2, self.rect.top - 15, bar_width, bar_height), 2)
+
     def shoot(self):
         """Особая атака босса"""
         from bullets import EnemyBullet
@@ -305,19 +329,19 @@ class BossEnemy(Enemy):
                 for i in range(8):
                     angle = (2 * math.pi / 8) * i
                     bullet = EnemyBullet(self.rect.centerx, self.rect.centery,
-                                        4, angle + math.pi/2)
+                                        speed=4, angle=angle + math.pi/2)
                     bullets.append(bullet)
             elif self.attack_pattern == 1:
                 # Тройной выстрел вниз
-                bullets.append(EnemyBullet(self.rect.centerx - 20, self.rect.bottom, 5))
-                bullets.append(EnemyBullet(self.rect.centerx, self.rect.bottom, 5))
-                bullets.append(EnemyBullet(self.rect.centerx + 20, self.rect.bottom, 5))
+                bullets.append(EnemyBullet(self.rect.centerx - 20, self.rect.bottom, speed=5))
+                bullets.append(EnemyBullet(self.rect.centerx, self.rect.bottom, speed=5))
+                bullets.append(EnemyBullet(self.rect.centerx + 20, self.rect.bottom, speed=5))
             else:
                 # Спиральный выстрел
                 angle = current_time * 0.01
                 for i in range(4):
                     bullet = EnemyBullet(self.rect.centerx, self.rect.centery,
-                                        4, angle + (math.pi/2) * i)
+                                        speed=4, angle=angle + (math.pi/2) * i)
                     bullets.append(bullet)
 
             return bullets
