@@ -7,6 +7,7 @@ import random
 from settings import SCREEN_WIDTH, SCREEN_HEIGHT, FPS, TITLE, BLACK, DARK_BLUE, WHITE, RED, GREEN
 from menu import Menu
 from game import Game
+from sounds import SoundManager
 
 
 class SpaceShooter:
@@ -20,6 +21,7 @@ class SpaceShooter:
         self.clock = pygame.time.Clock()
         self.running = True
         self.state = "menu"  # menu, game, game_over, victory
+        self.sound_manager = SoundManager()
         self.menu = Menu(self)
         self.game = None
         self.font = pygame.font.Font(None, 36)

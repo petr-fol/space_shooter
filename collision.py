@@ -44,6 +44,10 @@ class CollisionSystem:
                     explosion = Explosion(enemy.rect.centerx, enemy.rect.centery)
                     self.game.all_sprites.add(explosion)
 
+                    # Звук взрыва
+                    if self.game.sound_manager:
+                        self.game.sound_manager.play("explosion")
+
                     # Всплывающие очки
                     from effects import ScorePopup
                     popup = ScorePopup(enemy.rect.centerx, enemy.rect.centery,
@@ -61,6 +65,9 @@ class CollisionSystem:
 
         for bullet in hits:
             self.game.player.take_damage(bullet.damage)
+            # Звук получения урона
+            if self.game.sound_manager:
+                self.game.sound_manager.play("player_hit")
 
     def check_enemies_collide_player(self):
         """Проверка столкновения врагов с игроком"""
@@ -80,6 +87,10 @@ class CollisionSystem:
                 from effects import Explosion
                 explosion = Explosion(enemy.rect.centerx, enemy.rect.centery)
                 self.game.all_sprites.add(explosion)
+                
+                # Звук взрыва
+                if self.game.sound_manager:
+                    self.game.sound_manager.play("explosion")
 
             self.game.player.take_damage(enemy.damage)
 

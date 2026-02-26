@@ -16,6 +16,7 @@ class Game:
 
     def __init__(self, space_shooter, level=1):
         self.space_shooter = space_shooter
+        self.sound_manager = space_shooter.sound_manager
         self.all_sprites = pygame.sprite.Group()
         self.enemies = pygame.sprite.Group()
         self.player_bullets = pygame.sprite.Group()

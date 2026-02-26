@@ -4,10 +4,11 @@
 import pygame
 import math
 from settings import (
-    SCREEN_WIDTH, SCREEN_HEIGHT, PLAYER_SPEED, 
+    SCREEN_WIDTH, SCREEN_HEIGHT, PLAYER_SPEED,
     PLAYER_MAX_HEALTH, PLAYER_SHOOT_DELAY,
     WHITE, GREEN, RED, YELLOW, CYAN
 )
+from sounds import SoundManager
 
 
 class Player(pygame.sprite.Sprite):
@@ -24,6 +25,7 @@ class Player(pygame.sprite.Sprite):
         self.invincible = False
         self.invincible_timer = 0
         self.invincible_duration = 2000  # 2 секунды неуязвимости после получения урона
+        self.sound_manager = game.sound_manager
         
         # Создание изображения корабля
         self.image = self.create_ship_image()
@@ -114,6 +116,9 @@ class Player(pygame.sprite.Sprite):
             bullet = Bullet(self.rect.centerx, self.rect.top, -1)
             self.game.all_sprites.add(bullet)
             self.game.player_bullets.add(bullet)
+            # Воспроизведение звука выстрела
+            if self.sound_manager:
+                self.sound_manager.play("shoot")
             return True
         return False
     

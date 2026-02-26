@@ -6,6 +6,7 @@ from settings import (
     SCREEN_WIDTH, SCREEN_HEIGHT, WHITE, CYAN,
     YELLOW, RED, DARK_BLUE, GREEN
 )
+from sounds import SoundManager
 
 
 class Menu:
@@ -13,6 +14,7 @@ class Menu:
 
     def __init__(self, game):
         self.game = game
+        self.sound_manager = game.sound_manager
         self.selected_option = 0
         self.main_options = ["Start Game", "Select Level", "Controls", "Exit"]
         self.level_options = ["Level 1", "Level 2", "Level 3", "Back"]
@@ -35,16 +37,24 @@ class Menu:
         if event.type == pygame.KEYDOWN:
             if self.show_controls:
                 if event.key == pygame.K_ESCAPE or event.key == pygame.K_RETURN:
+                    if self.sound_manager:
+                        self.sound_manager.play("select")
                     self.show_controls = False
                 return
 
             if self.show_level_select:
                 if event.key == pygame.K_UP or event.key == pygame.K_w:
                     self.selected_level = (self.selected_level - 1) % len(self.level_options)
+                    if self.sound_manager:
+                        self.sound_manager.play("select")
                 elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
                     self.selected_level = (self.selected_level + 1) % len(self.level_options)
+                    if self.sound_manager:
+                        self.sound_manager.play("select")
                 elif event.key == pygame.K_RETURN or event.key == pygame.K_SPACE:
                     if self.selected_level == 3:  # Back
+                        if self.sound_manager:
+                            self.sound_manager.play("select")
                         self.show_level_select = False
                         self.selected_option = 0
                     else:
@@ -55,8 +65,12 @@ class Menu:
             # Главное меню
             if event.key == pygame.K_UP or event.key == pygame.K_w:
                 self.selected_option = (self.selected_option - 1) % len(self.main_options)
+                if self.sound_manager:
+                    self.sound_manager.play("select")
             elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
                 self.selected_option = (self.selected_option + 1) % len(self.main_options)
+                if self.sound_manager:
+                    self.sound_manager.play("select")
             elif event.key == pygame.K_RETURN or event.key == pygame.K_SPACE:
                 self.select_option()
 
