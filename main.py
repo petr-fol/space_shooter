@@ -3,7 +3,8 @@ Space Shooter - Главная точка входа
 """
 import pygame
 import sys
-from settings import SCREEN_WIDTH, SCREEN_HEIGHT, FPS, TITLE, BLACK, DARK_BLUE
+import random
+from settings import SCREEN_WIDTH, SCREEN_HEIGHT, FPS, TITLE, BLACK, DARK_BLUE, WHITE, RED, GREEN
 from menu import Menu
 from game import Game
 
@@ -107,7 +108,7 @@ class SpaceShooter:
         text_rect = text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 50))
         self.screen.blit(text, text_rect)
 
-        score_text = self.font.render(f"Score: {self.game.score if self.game else 0}", True, WHITE)
+        score_text = self.font.render(f"Score: {self.game.score.score if self.game else 0}", True, WHITE)
         score_rect = score_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 20))
         self.screen.blit(score_text, score_rect)
 
@@ -128,7 +129,7 @@ class SpaceShooter:
         text_rect = text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 50))
         self.screen.blit(text, text_rect)
 
-        score_text = self.font.render(f"Final Score: {self.game.score if self.game else 0}", True, WHITE)
+        score_text = self.font.render(f"Final Score: {self.game.score.score if self.game else 0}", True, WHITE)
         score_rect = score_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 20))
         self.screen.blit(score_text, score_rect)
 
@@ -143,7 +144,6 @@ class SpaceShooter:
 
     def draw_stars(self):
         """Рисование звёздного фона"""
-        import random
         for _ in range(50):
             x = random.randint(0, SCREEN_WIDTH)
             y = random.randint(0, SCREEN_HEIGHT)

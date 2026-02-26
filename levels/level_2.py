@@ -1,10 +1,11 @@
 """
 Уровень 2 - Средняя сложность
+Те же враги, но босс сильнее и нужно убить больше врагов
 """
 import pygame
 import random
 from settings import SCREEN_WIDTH, SCREEN_HEIGHT
-from enemies import BasicEnemy, SineEnemy, ZigZagEnemy, ShooterEnemy, TankEnemy, BossEnemy
+from enemies import BasicEnemy, SineEnemy, BossEnemy
 
 
 class Level2:
@@ -14,10 +15,10 @@ class Level2:
         self.game = game
         self.level_number = 2
         self.name = "Escalation"
-        self.enemies_to_kill = 18
+        self.enemies_to_kill = 18  # Больше чем в уровне 1
         self.enemies_killed = 0
         self.spawn_timer = 0
-        self.spawn_delay = 1200
+        self.spawn_delay = 1200  # Быстрее спавн
         self.boss_spawned = False
         self.boss_defeated = False
         self.max_enemies_on_screen = 5
@@ -53,21 +54,15 @@ class Level2:
                 enemy.kill()
 
     def spawn_enemy(self):
-        """Спавн врага"""
+        """Спавн обычного врага"""
         x = random.randint(80, SCREEN_WIDTH - 80)
         y = -50
 
-        rand = random.random()
-        if rand < 0.35:
-            enemy = BasicEnemy(x, y, level=2)
-        elif rand < 0.55:
-            enemy = SineEnemy(x, y, level=2)
-        elif rand < 0.70:
-            enemy = ZigZagEnemy(x, y, level=2)
-        elif rand < 0.85:
-            enemy = ShooterEnemy(x, y, level=2)
+        # Те же враги что и в уровне 1
+        if random.random() < 0.7:
+            enemy = BasicEnemy(x, y, level=2)  # Но с параметрами уровня 2
         else:
-            enemy = TankEnemy(x, y, level=2)
+            enemy = SineEnemy(x, y, level=2)
 
         self.game.all_sprites.add(enemy)
         self.game.enemies.add(enemy)
@@ -75,7 +70,7 @@ class Level2:
     def spawn_boss(self):
         """Спавн босса"""
         self.boss_spawned = True
-        boss = BossEnemy(SCREEN_WIDTH // 2, 80, level=2)
+        boss = BossEnemy(SCREEN_WIDTH // 2, 80, level=2)  # Босс уровня 2 (сильнее)
         self.game.all_sprites.add(boss)
         self.game.enemies.add(boss)
 

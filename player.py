@@ -31,6 +31,9 @@ class Player(pygame.sprite.Sprite):
         self.rect.centerx = SCREEN_WIDTH // 2
         self.rect.bottom = SCREEN_HEIGHT - 20
         
+        # Маска для коллизий
+        self.mask = pygame.mask.from_surface(self.image)
+        
         # Вектор движения
         self.vel_x = 0
         self.vel_y = 0
@@ -123,7 +126,7 @@ class Player(pygame.sprite.Sprite):
 
             # Создание эффекта взрыва
             from effects import Explosion
-            explosion = Explosion(self.rect.centerx, self.rect.centery, RED, 20)
+            explosion = Explosion(self.rect.centerx, self.rect.centery, color=RED, size=20)
             self.game.all_sprites.add(explosion)
 
             if self.health <= 0:

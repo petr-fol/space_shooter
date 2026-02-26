@@ -27,21 +27,16 @@ class Level1:
         """Обновление уровня"""
         current_time = pygame.time.get_ticks()
 
-        # Если босс ещё не спавнился
         if not self.boss_spawned:
-            # Проверяем, достигли ли лимита убитых
             if self.enemies_killed >= self.enemies_to_kill:
-                # Убиваем всех оставшихся врагов и спавним босса
                 self._kill_all_enemies()
                 self.spawn_boss()
             else:
-                # Спавн новых врагов
                 if (len(self.game.enemies) < self.max_enemies_on_screen and
                     current_time - self.spawn_timer > self.spawn_delay):
                     self.spawn_timer = current_time
                     self.spawn_enemy()
 
-        # Проверяем врагов, улетевших за экран
         self._check_escaped_enemies()
 
     def _kill_all_enemies(self):

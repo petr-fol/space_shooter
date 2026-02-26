@@ -33,6 +33,9 @@ class Enemy(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.centerx = x
         self.rect.centery = y
+        
+        # Маска для коллизий
+        self.mask = pygame.mask.from_surface(self.image)
 
     def create_enemy_image(self):
         """Создание изображения врага"""
@@ -177,6 +180,7 @@ class TankEnemy(Enemy):
         self.rect = self.image.get_rect()
         self.rect.centerx = x
         self.rect.centery = y
+        self.mask = pygame.mask.from_surface(self.image)
 
     def create_tank_image(self):
         """Создание изображения танка"""
@@ -207,6 +211,9 @@ class ShooterEnemy(Enemy):
         self.move_pattern = "circle"
         self.shoot_delay = 1000
         self.level = level
+        
+        # Маска для коллизий
+        self.mask = pygame.mask.from_surface(self.image)
 
     def shoot(self):
         """Стреляет тремя пулями"""
@@ -248,6 +255,7 @@ class BossEnemy(Enemy):
         self.rect = self.image.get_rect()
         self.rect.centerx = x
         self.rect.centery = y
+        self.mask = pygame.mask.from_surface(self.image)
 
     def create_boss_image(self):
         """Создание изображения босса"""
